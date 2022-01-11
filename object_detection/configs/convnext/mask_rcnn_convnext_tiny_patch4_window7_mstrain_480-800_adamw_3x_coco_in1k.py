@@ -1,3 +1,11 @@
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+
+# All rights reserved.
+
+# This source code is licensed under the license found in the
+# LICENSE file in the root directory of this source tree.
+
+
 _base_ = [
     '../_base_/models/mask_rcnn_convnext_fpn.py',
     '../_base_/datasets/coco_instance.py',
