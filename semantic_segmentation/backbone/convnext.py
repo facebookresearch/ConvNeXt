@@ -6,17 +6,6 @@
 # LICENSE file in the root directory of this source tree.
 
 
-# --------------------------------------------------------
-# BEIT: BERT Pre-Training of Image Transformers (https://arxiv.org/abs/2106.08254)
-# Github source: https://github.com/microsoft/unilm/tree/master/beit
-# Copyright (c) 2021 Microsoft
-# Licensed under The MIT License [see LICENSE for details]
-# By Hangbo Bao
-# Based on timm and DeiT code bases
-# https://github.com/rwightman/pytorch-image-models/tree/master/timm
-# https://github.com/facebookresearch/deit/
-# https://github.com/facebookresearch/dino
-# --------------------------------------------------------'
 from functools import partial
 
 import torch
@@ -70,7 +59,7 @@ class Block(nn.Module):
 class ConvNeXt(nn.Module):
     r""" ConvNeXt
         A PyTorch impl of : `A ConvNet for the 2020s`  -
-          https://arxiv.org/pdf/xxxxx.pdf
+          https://arxiv.org/pdf/2201.03545.pdf
 
     Args:
         in_chans (int): Number of input image channels. Default: 3
@@ -168,7 +157,7 @@ class ConvNeXt(nn.Module):
 
 class LayerNorm(nn.Module):
     r""" LayerNorm that supports two data formats: channels_last (default) or channels_first. 
-    The ordering of the dimensions in the inputs channels_last corresponds to inputs with 
+    The ordering of the dimensions in the inputs. channels_last corresponds to inputs with 
     shape (batch_size, height, width, channels) while channels_first corresponds to inputs 
     with shape (batch_size, channels, height, width).
     """

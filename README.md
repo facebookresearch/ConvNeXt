@@ -1,8 +1,8 @@
-# [A ConvNet for the 2020s](https://arxiv.org/abs/2201.xxxxx)
+# [A ConvNet for the 2020s](https://arxiv.org/abs/2201.03545)
 
 Official PyTorch implementation of **ConvNeXt**, from the following paper:
 
-[A ConvNet for the 2020s](https://arxiv.org/abs/2201.xxxxx). arXiv 2022.\
+[A ConvNet for the 2020s](https://arxiv.org/abs/2201.03545). arXiv 2022.\
 [Zhuang Liu](https://liuzhuang13.github.io), [Hanzi Mao](https://hanzimao.me/), [Chao-Yuan Wu](https://chaoyuan.org/), [Christoph Feichtenhofer](https://feichtenhofer.github.io/), [Trevor Darrell](https://people.eecs.berkeley.edu/~trevor/) and [Saining Xie](https://sainingxie.com)\
 Facebook AI Research, UC Berkeley
 
@@ -99,7 +99,7 @@ If you find this repository helpful, please consider citing:
 @Article{liu2021convnet,
   author  = {Zhuang Liu and Hanzi Mao and Chao-Yuan Wu and Christoph Feichtenhofer and Trevor Darrell and Saining Xie},
   title   = {A ConvNet for the 2020s},
-  journal = {arXiv preprint arXiv:2201.xxxxx},
+  journal = {arXiv preprint arXiv:2201.03545},
   year    = {2022},
 }
 ```

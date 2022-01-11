@@ -17,7 +17,7 @@ from .convnext import Block, LayerNorm
 class ConvNeXtIsotropic(nn.Module):
     r""" ConvNeXt
         A PyTorch impl of : `A ConvNet for the 2020s`  -
-        https://arxiv.org/pdf/xxxxxx
+        https://arxiv.org/pdf/2201.03545.pdf
         Isotropic ConvNeXts (Section 3.3 in paper)
 
     Args:

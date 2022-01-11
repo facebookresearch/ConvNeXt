@@ -52,7 +52,7 @@ class Block(nn.Module):
 class ConvNeXt(nn.Module):
     r""" ConvNeXt
         A PyTorch impl of : `A ConvNet for the 2020s`  -
-          https://arxiv.org/pdf/xxxxx.pdf
+          https://arxiv.org/pdf/2201.03545.pdf
 
     Args:
         in_chans (int): Number of input image channels. Default: 3
@@ -118,7 +118,7 @@ class ConvNeXt(nn.Module):
 
 class LayerNorm(nn.Module):
     r""" LayerNorm that supports two data formats: channels_last (default) or channels_first. 
-    The ordering of the dimensions in the inputs channels_last corresponds to inputs with 
+    The ordering of the dimensions in the inputs. channels_last corresponds to inputs with 
     shape (batch_size, height, width, channels) while channels_first corresponds to inputs 
     with shape (batch_size, channels, height, width).
     """

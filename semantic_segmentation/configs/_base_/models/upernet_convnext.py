@@ -1,15 +1,3 @@
-# --------------------------------------------------------
-# BEIT: BERT Pre-Training of Image Transformers (https://arxiv.org/abs/2106.08254)
-# Github source: https://github.com/microsoft/unilm/tree/master/beit
-# Copyright (c) 2021 Microsoft
-# Licensed under The MIT License [see LICENSE for details]
-# By Hangbo Bao
-# Based on timm, mmseg, setr, xcit and swin code bases
-# https://github.com/rwightman/pytorch-image-models/tree/master/timm
-# https://github.com/fudan-zvg/SETR
-# https://github.com/facebookresearch/xcit/
-# https://github.com/microsoft/Swin-Transformer
-# --------------------------------------------------------'
 norm_cfg = dict(type='SyncBN', requires_grad=True)
 model = dict(
     type='EncoderDecoder',
