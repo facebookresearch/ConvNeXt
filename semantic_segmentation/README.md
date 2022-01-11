@@ -36,15 +36,26 @@ More config files can be found at [`configs/convnext`](configs/convnext).
 
 ## Evaluation
 
-Command format:
+Command format for multi-scale testing:
 ```
 tools/dist_test.sh <CONFIG_PATH> <CHECKPOINT_PATH> <NUM_GPUS> --eval mIoU --aug-test
 ```
 
 For example, evaluate a `ConvNeXt-T` backbone with UperNet:
 ```bash
-bash tools/dist_test.sh configs/convnext/upernet_convnext_tiny_512_160k_ade20k.py \ 
+bash tools/dist_test.sh configs/convnext/upernet_convnext_tiny_512_160k_ade20k_ms.py \ 
     https://dl.fbaipublicfiles.com/convnext/ade20k/upernet_convnext_tiny_1k_512x512.pth 4 --eval mIoU --aug-test
+```
+
+Command format for single-scale testing:
+```
+tools/dist_test.sh <CONFIG_PATH> <CHECKPOINT_PATH> <NUM_GPUS> --eval mIoU
+```
+
+For example, evaluate a `ConvNeXt-T` backbone with UperNet:
+```bash
+bash tools/dist_test.sh configs/convnext/upernet_convnext_tiny_512_160k_ade20k_ss.py \ 
+    https://dl.fbaipublicfiles.com/convnext/ade20k/upernet_convnext_tiny_1k_512x512.pth 4 --eval mIoU
 ```
 
 ## Acknowledgment 
