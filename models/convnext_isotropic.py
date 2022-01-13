@@ -68,7 +68,7 @@ def convnext_isotropic_small(pretrained=False, **kwargs):
     model = ConvNeXtIsotropic(depth=18, dim=384, **kwargs)
     if pretrained:                                     
         url = 'https://dl.fbaipublicfiles.com/convnext/convnext_iso_small_1k_224_ema.pth'
-        checkpoint = torch.hub.load_state_dict_from_url(url=url, map_location="cpu", check_hash=True)
+        checkpoint = torch.hub.load_state_dict_from_url(url=url, map_location="cpu")
         model.load_state_dict(checkpoint["model"])
     return model
 
@@ -77,7 +77,7 @@ def convnext_isotropic_base(pretrained=False, **kwargs):
     model = ConvNeXtIsotropic(depth=18, dim=768, **kwargs)
     if pretrained:
         url = 'https://dl.fbaipublicfiles.com/convnext/convnext_iso_base_1k_224_ema.pth'
-        checkpoint = torch.hub.load_state_dict_from_url(url=url, map_location="cpu", check_hash=True)
+        checkpoint = torch.hub.load_state_dict_from_url(url=url, map_location="cpu")
         model.load_state_dict(checkpoint["model"])
     return model
 
@@ -86,6 +86,6 @@ def convnext_isotropic_large(pretrained=False, **kwargs):
     model = ConvNeXtIsotropic(depth=36, dim=1024, **kwargs)
     if pretrained:
         url = 'https://dl.fbaipublicfiles.com/convnext/convnext_iso_large_1k_224_ema.pth'
-        checkpoint = torch.hub.load_state_dict_from_url(url=url, map_location="cpu", check_hash=True)
+        checkpoint = torch.hub.load_state_dict_from_url(url=url, map_location="cpu")
         model.load_state_dict(checkpoint["model"])
     return model
