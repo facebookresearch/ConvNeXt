@@ -17,6 +17,7 @@ Our code has been tested with commit `8b57ed1`. Please refer to [README.md](http
 | ConvNeXt-XL | [ImageNet-22K](https://dl.fbaipublicfiles.com/convnext/convnext_xlarge_22k_224.pth) | UPerNet | 640x640 | 160K | 53.6 | 54.0 | 391M | 3335G | [model](https://dl.fbaipublicfiles.com/convnext/ade20k/upernet_convnext_xlarge_22k_640x640.pth) |
 
 ### Training
+Note: Please add `from backbone import convnext` to tools/train.py.
 
 Command format:
 ```
@@ -26,7 +27,7 @@ tools/dist_train.sh <CONFIG_PATH> <NUM_GPUS> --work-dir <SAVE_PATH> --seed 0 --d
 For example, using a `ConvNeXt-T` backbone with UperNet:
 ```bash
 bash tools/dist_train.sh \
-    configs/convnext/upernet_convnext_tiny_512_160k_ade20k.py 8 \
+    configs/convnext/upernet_convnext_tiny_512_160k_ade20k_ms.py 8 \
     --work-dir /path/to/save --seed 0 --deterministic \
     --options model.pretrained=https://dl.fbaipublicfiles.com/convnext/convnext_tiny_1k_224.pth
 ```
@@ -35,6 +36,7 @@ More config files can be found at [`configs/convnext`](configs/convnext).
 
 
 ## Evaluation
+Note: Please add `from backbone import convnext` to tools/test.py.
 
 Command format for multi-scale testing:
 ```

@@ -30,7 +30,7 @@ tools/dist_train.sh <CONFIG_FILE> <GPU_NUM> --cfg-options model.pretrained=<PRET
 ```
 For example, to train a Cascade Mask R-CNN model with a `ConvNeXt-T` backbone and 8 gpus, run:
 ```
-tools/dist_train.sh configs/convnext/cascade_mask_rcnn_convnext_tiny_patch4_window7_mstrain_480-800_giou_4conv1f_adamw_3x_coco_in1k.py 8 --cfg-options model.pretrained=<PRETRAIN_MODEL> 
+tools/dist_train.sh configs/convnext/cascade_mask_rcnn_convnext_tiny_patch4_window7_mstrain_480-800_giou_4conv1f_adamw_3x_coco_in1k.py 8 --cfg-options model.pretrained=https://dl.fbaipublicfiles.com/convnext/convnext_tiny_1k_224.pth
 ```
 
 More config files can be found at [`configs/convnext`](configs/convnext).
