@@ -13,5 +13,6 @@ from .layer_decay_optimizer_constructor import LearningRateDecayOptimizerConstru
 from .resize_transform import SETR_Resize
 from .apex_runner.optimizer import DistOptimizerHook
 from .train_api import train_segmentor
+from .customized_text import CustomizedTextLoggerHook
 
-__all__ = ['load_checkpoint', 'LearningRateDecayOptimizerConstructor', 'SETR_Resize', 'DistOptimizerHook', 'train_segmentor']
+__all__ = ['load_checkpoint', 'LearningRateDecayOptimizerConstructor', 'SETR_Resize', 'DistOptimizerHook', 'train_segmentor', 'CustomizedTextLoggerHook']
