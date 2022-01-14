@@ -108,7 +108,6 @@ class CustomizedTextLoggerHook(TextLoggerHook):
         # record lr and layer_0_lr
         cur_lr = runner.current_lr()
         if isinstance(cur_lr, list):
-            print(cur_lr)
             log_dict['layer_0_lr'] = min(cur_lr)
             log_dict['lr'] = max(cur_lr)
         else:

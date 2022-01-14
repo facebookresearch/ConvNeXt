@@ -89,10 +89,8 @@ class LearningRateDecayOptimizerConstructor(DefaultOptimizerConstructor):
 
             if decay_type == "layer_wise":
                 layer_id = get_num_layer_layer_wise(name, self.paramwise_cfg.get('num_layers'))
-                print(f"set param {name} as id {layer_id}")
             elif decay_type == "stage_wise":
                 layer_id = get_num_layer_stage_wise(name, num_layers)
-                print(f"set param {name} as id {layer_id}")
                 
             group_name = "layer_%d_%s" % (layer_id, group_name)
 
@@ -122,9 +120,4 @@ class LearningRateDecayOptimizerConstructor(DefaultOptimizerConstructor):
                 }
             print("Param groups = %s" % json.dumps(to_display, indent=2))
         
-        # state_dict = module.state_dict()
-        # for group_name in parameter_groups:
-        #     group = parameter_groups[group_name]
-        #     for name in group["param_names"]:
-        #         group["params"].append(state_dict[name])
         params.extend(parameter_groups.values())
