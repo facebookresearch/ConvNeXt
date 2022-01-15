@@ -58,7 +58,7 @@ def get_args_parser():
     parser.add_argument('--model', default='convnext_tiny', type=str, metavar='MODEL',
                         help='Name of model to train')
     parser.add_argument('--drop_path', type=float, default=0, metavar='PCT',
-                        help='Drop path rate (default: 0.1)')
+                        help='Drop path rate (default: 0.0)')
     parser.add_argument('--input_size', default=224, type=int,
                         help='image input size')
     parser.add_argument('--layer_scale_init_value', default=1e-6, type=float,
