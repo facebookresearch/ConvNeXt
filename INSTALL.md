@@ -16,11 +16,11 @@ pip install torch==1.8.0+cu111 torchvision==0.9.0+cu111 -f https://download.pyto
 
 Clone this repo and install required packages:
 ```
-git clone https://github.com/facebookresearch/ConvneXt
+git clone https://github.com/facebookresearch/ConvNeXt
 pip install timm==0.3.2 tensorboardX six
 ```
 
-The results in the paper are generated with `torch==1.8.0+cu111 torchvision==0.9.0+cu111 timm==0.3.2`.
+The results in the paper are produced with `torch==1.8.0+cu111 torchvision==0.9.0+cu111 timm==0.3.2`.
 
 ## Dataset Preparation
 
@@ -46,8 +46,8 @@ For pre-training on [ImageNet-22K](http://image-net.org/), download the dataset 
     img1.jpeg
   class2/
     img2.jpeg
-  class1/
+  class3/
     img3.jpeg
-  class2/
+  class4/
     img4.jpeg
 ```
