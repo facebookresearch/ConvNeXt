@@ -191,6 +191,14 @@ def get_args_parser():
     parser.add_argument('--use_amp', type=str2bool, default=False, 
                         help="Use PyTorch's AMP (Automatic Mixed Precision) or not")
 
+    # Weights and Biases arguments
+    parser.add_argument('--enable_wandb', type=str2bool, default=False,
+                        help="enable logging to Weights and Biases")
+    parser.add_argument('--project', default='convnext', type=str,
+                        help="The name of the W&B project where you're sending the new run.")
+    parser.add_argument('--wandb_ckpt', type=str2bool, default=False,
+                        help="Save model checkpoints as W&B Artifacts.")
+
     return parser
 
 def main(args):
@@ -233,6 +241,11 @@ def main(args):
         log_writer = utils.TensorboardLogger(log_dir=args.log_dir)
     else:
         log_writer = None
+
+    if global_rank == 0:
+        wandb_logger = utils.WandbLogger(args)
+    else:
+        wandb_logger = None
 
     data_loader_train = torch.utils.data.DataLoader(
         dataset_train, sampler=sampler_train,
@@ -442,6 +455,13 @@ def main(args):
                 log_writer.flush()
             with open(os.path.join(args.output_dir, "log.txt"), mode="a", encoding="utf-8") as f:
                 f.write(json.dumps(log_stats) + "\n")
+
+        if wandb_logger:
+            wandb_logger.log_metrics(log_stats)
+
+    if wandb_logger and args.wandb_ckpt and args.save_ckpt and args.output_dir:
+        wandb_logger.log_checkpoints()
+
 
     total_time = time.time() - start_time
     total_time_str = str(datetime.timedelta(seconds=int(total_time)))
