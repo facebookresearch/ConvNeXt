@@ -23,7 +23,7 @@ python run_with_submitit.py --nodes 4 --ngpus 8 \
 
 - You may need to change cluster-specific arguments in `run_with_submitit.py`.
 - You can add `--use_amp true` to train in PyTorch's Automatic Mixed Precision (AMP).
-- Use `--resume /path/to/checkpoint`/`--auto_resume true` to resume training from a previous checkpoint/output folder.
+- Use `--resume /path_or_url/to/checkpoint.pth` to resume training from a previous checkpoint; use `--auto_resume true` to auto-resume from latest checkpoint in the specified output folder.
 - `--batch_size`: batch size per GPU; `--update_freq`: gradient accumulation steps.
 - The effective batch size = `--nodes` * `--ngpus` * `--batch_size` * `--update_freq`. In the example above, the effective batch size is `4*8*128*1 = 4096`. You can adjust these four arguments together to keep the effective batch size at 4096 and avoid OOM issues, based on the model size, number of nodes and GPU memory.
 
@@ -355,6 +355,7 @@ python -m torch.distributed.launch --nproc_per_node=8 main.py \
 
 ### Fine-tune from ImageNet-22K pre-training
 We finetune from ImageNet-22K pre-trained models, in both 224 and 384 resolutions.
+
 ConvNeXt-B fine-tuning on ImageNet-1K (224x224)
 
 Multi-node

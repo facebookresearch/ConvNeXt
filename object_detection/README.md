@@ -46,4 +46,4 @@ tools/dist_test.sh <CONFIG_FILE> <DET_CHECKPOINT_FILE> <GPU_NUM> --eval bbox seg
 
 ## Acknowledgment 
 
-This code is built using the [mmdetection](https://github.com/open-mmlab/mmdetection) library, [Timm](https://github.com/rwightman/pytorch-image-models) library, the [BeiT](https://github.com/microsoft/unilm/tree/f8f3df80c65eb5e5fc6d6d3c9bd3137621795d1e/beit) repository, the [Swin](https://github.com/microsoft/Swin-Transformer).
+This code is built using [mmdetection](https://github.com/open-mmlab/mmdetection), [timm](https://github.com/rwightman/pytorch-image-models) libraries, and [BeiT](https://github.com/microsoft/unilm/tree/f8f3df80c65eb5e5fc6d6d3c9bd3137621795d1e/beit), [Swin Transformer](https://github.com/microsoft/Swin-Transformer) repositories.
