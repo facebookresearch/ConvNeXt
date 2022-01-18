@@ -20,7 +20,7 @@ We propose **ConvNeXt**, a pure ConvNet model constructed entirely from standard
 - [x] ImageNet-22K Pre-training Code  
 - [x] ImageNet-1K Fine-tuning Code  
 - [x] Downstream Transfer (Detection, Segmentation) Code
-- [x] Image Classification Web Demo [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/akhaliq/convnext)
+- [x] ImageNet-1K Classification Web Demo [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/akhaliq/convnext)
 
 
 <!-- ✅ ⬜️  -->
