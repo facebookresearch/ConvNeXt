@@ -20,7 +20,7 @@ We propose **ConvNeXt**, a pure ConvNet model constructed entirely from standard
 - [x] ImageNet-22K Pre-training Code  
 - [x] ImageNet-1K Fine-tuning Code  
 - [x] Downstream Transfer (Detection, Segmentation) Code
-- [x] ImageNet Classification [Colab](https://colab.research.google.com/drive/1CBYTIZ4tBMsVL5cqu9N_-Q3TBprqsfEO?usp=sharing) and Web Demo [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/akhaliq/convnext)
+- [x] Image Classification [Colab](https://colab.research.google.com/drive/1CBYTIZ4tBMsVL5cqu9N_-Q3TBprqsfEO?usp=sharing) and Web Demo [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/akhaliq/convnext)
 
 
 <!-- ✅ ⬜️  -->
@@ -99,7 +99,7 @@ This project is released under the MIT license. Please see the [LICENSE](LICENSE
 ## Citation
 If you find this repository helpful, please consider citing:
 ```
-@Article{liu2021convnet,
+@Article{liu2022convnet,
   author  = {Zhuang Liu and Hanzi Mao and Chao-Yuan Wu and Christoph Feichtenhofer and Trevor Darrell and Saining Xie},
   title   = {A ConvNet for the 2020s},
   journal = {arXiv preprint arXiv:2201.03545},
