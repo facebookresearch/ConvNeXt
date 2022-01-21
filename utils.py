@@ -243,10 +243,8 @@ class WandbLogger(object):
 
     def set_steps(self):
         # Set global training setp
-        self._wandb.define_metric('batch/global_train_step')
         self._wandb.define_metric('batch/*', step_metric='batch/global_train_step')
         # Set epoch-wise step
-        self._wandb.define_metric('epoch')
         self._wandb.define_metric('train/*', step_metric='epoch')
         self._wandb.define_metric('test/*', step_metric='epoch')
 
