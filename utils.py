@@ -226,9 +226,9 @@ class WandbLogger(object):
 
         for k, v in metrics.items():
             if 'train' in k:
-                self._wandb.log({f'train/{k}': v}, commit=False)
+                self._wandb.log({f'Global Train/{k}': v}, commit=False)
             elif 'test' in k:
-                self._wandb.log({f'test/{k}': v}, commit=False)
+                self._wandb.log({f'Global Test/{k}': v}, commit=False)
 
         self._wandb.log({})
 
@@ -242,11 +242,11 @@ class WandbLogger(object):
         self._wandb.log_artifact(model_artifact, aliases=["latest", "best"])
 
     def set_steps(self):
-        # Set global training setp
-        self._wandb.define_metric('batch/*', step_metric='batch/global_train_step')
+        # Set global training step
+        self._wandb.define_metric('Rank-0 Batch Wise/*', step_metric='Rank-0 Batch Wise/global_train_step')
         # Set epoch-wise step
-        self._wandb.define_metric('train/*', step_metric='epoch')
-        self._wandb.define_metric('test/*', step_metric='epoch')
+        self._wandb.define_metric('Global Train/*', step_metric='epoch')
+        self._wandb.define_metric('Global Test/*', step_metric='epoch')
 
 
 def setup_for_distributed(is_master):

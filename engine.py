@@ -118,15 +118,15 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
 
         if wandb_logger:
             wandb_logger._wandb.log({
-                'batch/train_loss': loss_value,
-                'batch/train_max_lr': max_lr,
-                'batch/train_min_lr': min_lr
+                'Rank-0 Batch Wise/train_loss': loss_value,
+                'Rank-0 Batch Wise/train_max_lr': max_lr,
+                'Rank-0 Batch Wise/train_min_lr': min_lr
             }, commit=False)
             if class_acc:
-                wandb_logger._wandb.log({'batch/train_class_acc': class_acc}, commit=False)
+                wandb_logger._wandb.log({'Rank-0 Batch Wise/train_class_acc': class_acc}, commit=False)
             if use_amp:
-                wandb_logger._wandb.log({'batch/train_grad_norm': grad_norm}, commit=False)
-            wandb_logger._wandb.log({'batch/global_train_step': it})
+                wandb_logger._wandb.log({'Rank-0 Batch Wise/train_grad_norm': grad_norm}, commit=False)
+            wandb_logger._wandb.log({'Rank-0 Batch Wise/global_train_step': it})
             
 
     # gather the stats from all processes
