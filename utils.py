@@ -212,7 +212,7 @@ class WandbLogger(object):
                 config=args
             )
 
-    def log_metrics(self, metrics, commit=True):
+    def log_epoch_metrics(self, metrics, commit=True):
         """
         Log train/test metrics onto W&B.
         """
@@ -240,6 +240,15 @@ class WandbLogger(object):
 
         model_artifact.add_dir(output_dir)
         self._wandb.log_artifact(model_artifact, aliases=["latest", "best"])
+
+    def set_steps(self):
+        # Set global training setp
+        self._wandb.define_metric('batch/global_train_step')
+        self._wandb.define_metric('batch/*', step_metric='batch/global_train_step')
+        # Set epoch-wise step
+        self._wandb.define_metric('epoch')
+        self._wandb.define_metric('train/*', step_metric='epoch')
+        self._wandb.define_metric('test/*', step_metric='epoch')
 
 
 def setup_for_distributed(is_master):
