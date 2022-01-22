@@ -218,7 +218,7 @@ def build_convnext_backbone(cfg, input_shape):
     )
 
 @BACKBONE_REGISTRY.register()
-def build_convnext_fpn_dyhead_backbone(cfg, input_shape: ShapeSpec):
+def build_convnext_fpn_backbone(cfg, input_shape: ShapeSpec):
     """
     Args:
         cfg: a detectron2 CfgNode
