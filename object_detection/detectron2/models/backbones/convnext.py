@@ -27,6 +27,8 @@ from detectron2.modeling.backbone.build import BACKBONE_REGISTRY
 from detectron2.modeling.backbone.fpn import FPN, LastLevelMaxPool, LastLevelP6P7
 from detectron2.layers import ShapeSpec
 
+from dyhead import DyHead
+
 
 
 class Block(nn.Module):
@@ -78,10 +80,10 @@ class ConvNeXt(Backbone):
         drop_path_rate (float): Stochastic depth rate. Default: 0.
         layer_scale_init_value (float): Init value for Layer Scale. Default: 1e-6.
         head_init_scale (float): Init scaling value for classifier weights and biases. Default: 1.
+        out_features (tuple(int)): Stage numbers of the outputs given to the Neck.
     """
     def __init__(self, in_chans=3, depths=[3, 3, 9, 3], dims=[96, 192, 384, 768], 
-                 drop_path_rate=0., layer_scale_init_value=1e-6, out_indices=[0, 1, 2, 3],
-                 out_features=None):
+                 drop_path_rate=0., layer_scale_init_value=1e-6, out_features=None):
         super().__init__()
 
         self.downsample_layers = nn.ModuleList() # stem and 3 intermediate downsampling conv layers
@@ -118,13 +120,9 @@ class ConvNeXt(Backbone):
             )
             self.stages.append(stage)
             cur += depths[i]
-
             
-            stage_name = "stage{}".format(i)
             self._out_feature_channels[i] = dims[i]
             self._out_feature_strides[i] = strides[i] * 2 ** i
-
-        self.out_indices = out_indices
 
         norm_layer = partial(LayerNorm, eps=1e-6, data_format="channels_first")
         for i_layer in range(4):
@@ -162,7 +160,7 @@ class ConvNeXt(Backbone):
         for i in range(4):
             x = self.downsample_layers[i](x)
             x = self.stages[i](x)
-            if i in self.out_indices:
+            if i in self._out_features:
                 norm_layer = getattr(self, f'norm{i}')
                 x_out = norm_layer(x)
                 out = x_out.contiguous()
@@ -216,12 +214,11 @@ def build_convnext_backbone(cfg, input_shape):
         dims=cfg.MODEL.CONVNEXT.DIMS,
         drop_path_rate=cfg.MODEL.CONVNEXT.DROP_PATH_RATE,
         layer_scale_init_value=cfg.MODEL.CONVNEXT.LAYER_SCALE_INIT_VALUE,
-        out_indices=out_features,
         out_features=cfg.MODEL.CONVNEXT.OUT_FEATURES
     )
 
 @BACKBONE_REGISTRY.register()
-def build_convnext_fpn_backbone(cfg, input_shape: ShapeSpec):
+def build_convnext_fpn_dyhead_backbone(cfg, input_shape: ShapeSpec):
     """
     Args:
         cfg: a detectron2 CfgNode
@@ -240,4 +237,5 @@ def build_convnext_fpn_backbone(cfg, input_shape: ShapeSpec):
         top_block=LastLevelMaxPool(),
         fuse_type=cfg.MODEL.FPN.FUSE_TYPE,
     )
-    return backbone
+    dyhead = DyHead(cfg, backbone)
+    return dyhead
