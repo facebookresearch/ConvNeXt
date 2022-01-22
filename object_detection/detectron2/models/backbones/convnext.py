@@ -27,8 +27,6 @@ from detectron2.modeling.backbone.build import BACKBONE_REGISTRY
 from detectron2.modeling.backbone.fpn import FPN, LastLevelMaxPool, LastLevelP6P7
 from detectron2.layers import ShapeSpec
 
-from dyhead import DyHead
-
 
 
 class Block(nn.Module):
