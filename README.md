@@ -84,6 +84,9 @@ This should give
 - For evaluating other model variants, change `--model`, `--resume`, `--input_size` accordingly. You can get the url to pre-trained models from the tables above. 
 - Setting model-specific `--drop_path` is not strictly required in evaluation, as the `DropPath` module in timm behaves the same during evaluation; but it is required in training. See [TRAINING.md](TRAINING.md) or our paper for the values used for different models.
 
+#### Update:
+The model has been ported for Detectron2 framework. The files required for training the model using standard detectron2 can be found [here](object_detection/detectron2). The configs and model can be loaded into default detectron2 files such as **train_net.py** to train using ConvNeXt. 
+
 ## Training
 See [TRAINING.md](TRAINING.md) for training and fine-tuning instructions.
 
