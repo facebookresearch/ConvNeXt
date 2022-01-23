@@ -12,24 +12,13 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from timm.models.layers import trunc_normal_, DropPath
-
-#from mmcv_custom import load_checkpoint
-#from mmseg.utils import get_root_logger
-#from mmseg.models.builder import BACKBONES
-
-
 import torch.utils.checkpoint as checkpoint
 import numpy as np
 
 from detectron2.modeling.backbone import Backbone
-#from detectron2.modeling.mmdet_wrapper import MMDetBackbone as Backbone
 from detectron2.modeling.backbone.build import BACKBONE_REGISTRY
 from detectron2.modeling.backbone.fpn import FPN, LastLevelMaxPool, LastLevelP6P7
 from detectron2.layers import ShapeSpec
-
-from dyhead import DyHead
-
-
 
 class Block(nn.Module):
     r""" ConvNeXt Block. There are two equivalent implementations:
@@ -237,5 +226,4 @@ def build_convnext_fpn_backbone(cfg, input_shape: ShapeSpec):
         top_block=LastLevelMaxPool(),
         fuse_type=cfg.MODEL.FPN.FUSE_TYPE,
     )
-    dyhead = DyHead(cfg, backbone)
-    return dyhead
+    return backbone
