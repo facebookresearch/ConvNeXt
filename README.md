@@ -92,6 +92,10 @@ This should give
 ## Training
 See [TRAINING.md](TRAINING.md) for training and fine-tuning instructions.
 
+## TensorFlow / Keras models
+Apart from the isotropic models, a total of 15 ConvNeXt models are available in TensorFlow / Keras. You can find them here:
+[sayakpaul/ConvNeXt-TF](https://github.com/sayakpaul/ConvNeXt-TF).
+
 ## Acknowledgement
 This repository is built using the [timm](https://github.com/rwightman/pytorch-image-models) library, [DeiT](https://github.com/facebookresearch/deit) and [BEiT](https://github.com/microsoft/unilm/tree/master/beit) repositories.
 
