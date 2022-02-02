@@ -242,7 +242,7 @@ def main(args):
     else:
         log_writer = None
 
-    if global_rank == 0:
+    if global_rank == 0 and args.enable_wandb:
         wandb_logger = utils.WandbLogger(args)
     else:
         wandb_logger = None
