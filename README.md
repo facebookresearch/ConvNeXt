@@ -4,7 +4,8 @@ Official PyTorch implementation of **ConvNeXt**, from the following paper:
 
 [A ConvNet for the 2020s](https://arxiv.org/abs/2201.03545). CVPR 2022.\
 [Zhuang Liu](https://liuzhuang13.github.io), [Hanzi Mao](https://hanzimao.me/), [Chao-Yuan Wu](https://chaoyuan.org/), [Christoph Feichtenhofer](https://feichtenhofer.github.io/), [Trevor Darrell](https://people.eecs.berkeley.edu/~trevor/) and [Saining Xie](https://sainingxie.com)\
-Facebook AI Research, UC Berkeley
+Facebook AI Research, UC Berkeley\
+[[`arXiv`](https://arxiv.org/abs/2201.03545)][[`video`](https://www.youtube.com/watch?v=QzCjXqFnWPE)]
 
 --- 
 
@@ -20,8 +21,8 @@ We propose **ConvNeXt**, a pure ConvNet model constructed entirely from standard
 - [x] ImageNet-22K Pre-training Code  
 - [x] ImageNet-1K Fine-tuning Code  
 - [x] Downstream Transfer (Detection, Segmentation) Code
-- [x] Image Classification \[[Colab\]](https://colab.research.google.com/drive/1CBYTIZ4tBMsVL5cqu9N_-Q3TBprqsfEO?usp=sharing) and Web Demo [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/akhaliq/convnext)
-- [x] Fine-tune on CIFAR with Weights & Biases logging \[[Colab\]](https://colab.research.google.com/drive/1ijAxGthE9RENJJQRO17v9A7PTd1Tei9F?usp=sharing)
+- [x] Image Classification [\[Colab\]](https://colab.research.google.com/drive/1CBYTIZ4tBMsVL5cqu9N_-Q3TBprqsfEO?usp=sharing) and Web Demo [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/akhaliq/convnext)
+- [x] Fine-tune on CIFAR with Weights & Biases logging [\[Colab\]](https://colab.research.google.com/drive/1ijAxGthE9RENJJQRO17v9A7PTd1Tei9F?usp=sharing)
 
 
 
