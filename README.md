@@ -9,7 +9,7 @@ Facebook AI Research, UC Berkeley
 --- 
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/8370623/148624004-e9581042-ea4d-4e10-b3bd-42c92b02053b.png" width=100% height=100% 
+<img src="https://user-images.githubusercontent.com/8370623/180626875-fe958128-6102-4f01-9ca4-e3a30c3148f9.png" width=100% height=100% 
 class="center">
 </p>
 
