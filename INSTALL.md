@@ -3,7 +3,7 @@
 We provide installation instructions for ImageNet classification experiments here.
 
 ## Dependency Setup
-Create an new conda virtual environment
+Create a new conda virtual environment
 ```
 conda create -n convnext python=3.8 -y
 conda activate convnext
