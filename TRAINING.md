@@ -33,7 +33,7 @@ python -m torch.distributed.launch --nproc_per_node=8 main.py \
 --model convnext_tiny --drop_path 0.1 \
 --batch_size 128 --lr 4e-3 --update_freq 4 \
 --model_ema true --model_ema_eval true \
---data_path /path/to/imagenet-1k 
+--data_path /path/to/imagenet-1k \
 --output_dir /path/to/save_results
 ```
 
