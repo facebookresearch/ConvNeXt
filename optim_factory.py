@@ -14,7 +14,6 @@ from timm.optim.adahessian import Adahessian
 from timm.optim.adamp import AdamP
 from timm.optim.lookahead import Lookahead
 from timm.optim.nadam import Nadam
-from timm.optim.novograd import NovoGrad
 from timm.optim.nvnovograd import NvNovoGrad
 from timm.optim.radam import RAdam
 from timm.optim.rmsprop_tf import RMSpropTF
@@ -168,8 +167,6 @@ def create_optimizer(args, model, get_num_layer=None, get_layer_scale=None, filt
         optimizer = optim.RMSprop(parameters, alpha=0.9, momentum=args.momentum, **opt_args)
     elif opt_lower == 'rmsproptf':
         optimizer = RMSpropTF(parameters, alpha=0.9, momentum=args.momentum, **opt_args)
-    elif opt_lower == 'novograd':
-        optimizer = NovoGrad(parameters, **opt_args)
     elif opt_lower == 'nvnovograd':
         optimizer = NvNovoGrad(parameters, **opt_args)
     elif opt_lower == 'fusedsgd':
