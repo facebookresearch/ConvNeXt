@@ -1,4 +1,7 @@
-I  add some comments just for learning code .
+I  add some comments just for learning code . - CHENHUI
+
+
+The following is the original text .
 ---
 # [A ConvNet for the 2020s](https://arxiv.org/abs/2201.03545)
 
