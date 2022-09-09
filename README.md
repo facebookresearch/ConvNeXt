@@ -1,3 +1,5 @@
+I  add some comments just for learning code .
+---
 # [A ConvNet for the 2020s](https://arxiv.org/abs/2201.03545)
 
 Official PyTorch implementation of **ConvNeXt**, from the following paper:
