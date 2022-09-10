@@ -31,6 +31,13 @@ from utils import NativeScalerWithGradNormCount as NativeScaler
 import utils
 import models.convnext
 import models.convnext_isotropic
+from torchsummary import summary
+'''
+A Nice Tool For Summary Model: 
+    from torchsummary import summary
+'''
+
+
 
 def str2bool(v):
     """
@@ -59,6 +66,13 @@ def get_args_parser():
                         help='Name of model to train')
     parser.add_argument('--drop_path', type=float, default=0, metavar='PCT',
                         help='Drop path rate (default: 0.0)')
+    '''
+    Just as dropout prevents co-adaptation of activations, 
+    DropPath prevents co-adaptation of parallel paths in networks 
+    such as FractalNets by randomly dropping operands of the join layers. 
+    See https://paperswithcode.com/method/droppath
+    '''
+
     parser.add_argument('--input_size', default=224, type=int,
                         help='image input size')
     parser.add_argument('--layer_scale_init_value', default=1e-6, type=float,
@@ -90,6 +104,10 @@ def get_args_parser():
     parser.add_argument('--lr', type=float, default=4e-3, metavar='LR',
                         help='learning rate (default: 4e-3), with total batch size 4096')
     parser.add_argument('--layer_decay', type=float, default=1.0)
+    # Used to scaler  the lr (and weight ?) for corresponding layer
+    # See create_optimizer() and train_one_epoch()
+    # param_group["lr"] = lr_schedule_values[it] * param_group["lr_scale"]
+
     parser.add_argument('--min_lr', type=float, default=1e-6, metavar='LR',
                         help='lower lr bound for cyclic schedulers that hit 0 (1e-6)')
     parser.add_argument('--warmup_epochs', type=int, default=20, metavar='N',
@@ -137,9 +155,9 @@ def get_args_parser():
     # * Finetuning params
     parser.add_argument('--finetune', default='',
                         help='finetune from checkpoint')
-    parser.add_argument('--head_init_scale', default=1.0, type=float,
+    parser.add_argument('--head_init_scale', default = 1.0, type = float,
                         help='classifier head initial scale, typically adjusted in fine-tuning')
-    parser.add_argument('--model_key', default='model|module', type=str,
+    parser.add_argument('--model_key', default='model|module', type = str,
                         help='which key to load from saved state dict, usually model or model_ema')
     parser.add_argument('--model_prefix', default='', type=str)
 
@@ -151,8 +169,9 @@ def get_args_parser():
     parser.add_argument('--nb_classes', default=1000, type=int,
                         help='number of the classification types')
     parser.add_argument('--imagenet_default_mean_and_std', type=str2bool, default=True)
-    parser.add_argument('--data_set', default='IMNET', choices=['CIFAR', 'IMNET', 'image_folder'],
+    parser.add_argument('--data_set', default='IMNET', choices=['CIFAR100','CIFAR10', 'IMNET', 'image_folder'],
                         type=str, help='ImageNet dataset path')
+    # Add a 'CIFAR10' dataset for learning code
     parser.add_argument('--output_dir', default='',
                         help='path where to save, empty for no saving')
     parser.add_argument('--log_dir', default=None,
@@ -296,17 +315,21 @@ def main(args):
         for model_key in args.model_key.split('|'):
             if model_key in checkpoint:
                 checkpoint_model = checkpoint[model_key]
+                # default model_key  = 'model' , then load checkpoint['model']
                 print("Load state_dict by model_key = %s" % model_key)
                 break
         if checkpoint_model is None:
-            checkpoint_model = checkpoint
+            checkpoint_model = checkpoint # That's means the checkpoint just a model
         state_dict = model.state_dict()
         for k in ['head.weight', 'head.bias']:
             if k in checkpoint_model and checkpoint_model[k].shape != state_dict[k].shape:
                 print(f"Removing key {k} from pretrained checkpoint")
+                # do not laod the head layer
                 del checkpoint_model[k]
         utils.load_state_dict(model, checkpoint_model, prefix=args.model_prefix)
+
     model.to(device)
+    summary(model,input_size=(3,args.input_size,args.input_size))
 
     model_ema = None
     if args.model_ema:
@@ -333,10 +356,16 @@ def main(args):
     print("Number of training training per epoch = %d" % num_training_steps_per_epoch)
 
     if args.layer_decay < 1.0 or args.layer_decay > 1.0:
-        num_layers = 12 # convnext layers divided into 12 parts, each with a different decayed lr value.
+        num_layers = 12
+        # convnext layers divided into 12 parts, each with a different decayed lr value.
         assert args.model in ['convnext_small', 'convnext_base', 'convnext_large', 'convnext_xlarge'], \
              "Layer Decay impl only supports convnext_small/base/large/xlarge"
-        assigner = LayerDecayValueAssigner(list(args.layer_decay ** (num_layers + 1 - i) for i in range(num_layers + 2)))
+        assigner = LayerDecayValueAssigner(
+            list(
+                args.layer_decay ** (num_layers + 1 - i) for i in range(num_layers + 2)
+            ) # [ 1e-10 , 1e-9 , ... , 0.1 , 1]
+        )
+
     else:
         assigner = None
 
@@ -345,7 +374,7 @@ def main(args):
 
     if args.distributed:
         model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.gpu], find_unused_parameters=False)
-        model_without_ddp = model.module
+        model_without_ddp = model.module # DDP : DistributedDataParallel (DDP)
 
     optimizer = create_optimizer(
         args, model_without_ddp, skip_list=None,

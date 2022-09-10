@@ -36,6 +36,7 @@ def train_one_epoch(model: torch.nn.Module, criterion: torch.nn.Module,
         it = start_steps + step  # global training iteration
         # Update LR & WD for the first acc
         if lr_schedule_values is not None or wd_schedule_values is not None and data_iter_step % update_freq == 0:
+            # See create_optimizer() , controled by args.layer_decay
             for i, param_group in enumerate(optimizer.param_groups):
                 if lr_schedule_values is not None:
                     param_group["lr"] = lr_schedule_values[it] * param_group["lr_scale"]

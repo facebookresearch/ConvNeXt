@@ -62,6 +62,7 @@ def get_num_layer_for_convnext(var_name):
 class LayerDecayValueAssigner(object):
     def __init__(self, values):
         self.values = values
+        # a list like  [ 1e-10 , 1e-9 , ... , 0.1 , 1]
 
     def get_scale(self, layer_id):
         return self.values[layer_id]
@@ -91,6 +92,7 @@ def get_parameter_groups(model, weight_decay=1e-5, skip_list=(), get_num_layer=N
 
         if group_name not in parameter_group_names:
             if get_layer_scale is not None:
+                # come from  object assigner in main.py
                 scale = get_layer_scale(layer_id)
             else:
                 scale = 1.
@@ -113,7 +115,7 @@ def get_parameter_groups(model, weight_decay=1e-5, skip_list=(), get_num_layer=N
 
 
 def create_optimizer(args, model, get_num_layer=None, get_layer_scale=None, filter_bias_and_bn=True, skip_list=None):
-    opt_lower = args.opt.lower()
+    opt_lower = args.opt.lower()  # lower the name
     weight_decay = args.weight_decay
     # if weight_decay and filter_bias_and_bn:
     if filter_bias_and_bn:
@@ -122,7 +124,8 @@ def create_optimizer(args, model, get_num_layer=None, get_layer_scale=None, filt
             skip = skip_list
         elif hasattr(model, 'no_weight_decay'):
             skip = model.no_weight_decay()
-        parameters = get_parameter_groups(model, weight_decay, skip, get_num_layer, get_layer_scale)
+        parameters = get_parameter_groups(
+            model, weight_decay, skip, get_num_layer, get_layer_scale)
         weight_decay = 0.
     else:
         parameters = model.parameters()

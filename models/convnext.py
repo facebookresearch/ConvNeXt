@@ -25,28 +25,43 @@ class Block(nn.Module):
     """
     def __init__(self, dim, drop_path=0., layer_scale_init_value=1e-6):
         super().__init__()
-        self.dwconv = nn.Conv2d(dim, dim, kernel_size=7, padding=3, groups=dim) # depthwise conv
-        self.norm = LayerNorm(dim, eps=1e-6)
-        self.pwconv1 = nn.Linear(dim, 4 * dim) # pointwise/1x1 convs, implemented with linear layers
+        self.dwconv = nn.Conv2d(dim, dim, kernel_size=7, padding=3, groups=dim)
+        # depthwise conv , do not change shape
+
+        self.norm = LayerNorm(dim, eps=1e-6) # channel last
+        self.pwconv1 = nn.Linear(dim, 4 * dim)
+        # pointwise/1x1 convs, equal implemented with linear layers
+
         self.act = nn.GELU()
         self.pwconv2 = nn.Linear(4 * dim, dim)
+
+        # A learned parameter  for active value :
+        # out = scale * f(x)
         self.gamma = nn.Parameter(layer_scale_init_value * torch.ones((dim)), 
                                     requires_grad=True) if layer_scale_init_value > 0 else None
+
         self.drop_path = DropPath(drop_path) if drop_path > 0. else nn.Identity()
+        # 查看源代码,可以看到是随机将batch中的某些样本激活值直接置为0
+        # See https://blog.csdn.net/ViatorSun/article/details/122947859
 
     def forward(self, x):
+        # 每个block里边实现的是 小 -> 大 -> 小 结构
+        # 每个block里边 由于 小 -> 大 -> 小 结构的channel 数目是通过 linner变换得到的
+        # 和1 * 1 的conv效果一样 ， 但是作者发现，"linner slightly faster in PyTorch"
+        # 所以在block里边的 layernorm 要求的是 channel last
+
         input = x
         x = self.dwconv(x)
         x = x.permute(0, 2, 3, 1) # (N, C, H, W) -> (N, H, W, C)
         x = self.norm(x)
-        x = self.pwconv1(x)
+        x = self.pwconv1(x) # (N, H, W, C) -> (N, H, W, 4 * C)
         x = self.act(x)
-        x = self.pwconv2(x)
+        x = self.pwconv2(x) # (N, H, W, 4 * C) -> (N, H, W, C)
         if self.gamma is not None:
-            x = self.gamma * x
+            x = self.gamma * x # scale the output of f
         x = x.permute(0, 3, 1, 2) # (N, H, W, C) -> (N, C, H, W)
 
-        x = input + self.drop_path(x)
+        x = input + self.drop_path(x) # 随机将部分激活值置为0
         return x
 
 class ConvNeXt(nn.Module):
@@ -72,28 +87,45 @@ class ConvNeXt(nn.Module):
         self.downsample_layers = nn.ModuleList() # stem and 3 intermediate downsampling conv layers
         stem = nn.Sequential(
             nn.Conv2d(in_chans, dims[0], kernel_size=4, stride=4),
+            # Like Patch Partition in SwinTransformer
             LayerNorm(dims[0], eps=1e-6, data_format="channels_first")
-        )
+        ) # ( B , C , H , W ) - > ( B , 96 , H/4 , W/4 )
+
         self.downsample_layers.append(stem)
+
         for i in range(3):
             downsample_layer = nn.Sequential(
                     LayerNorm(dims[i], eps=1e-6, data_format="channels_first"),
                     nn.Conv2d(dims[i], dims[i+1], kernel_size=2, stride=2),
             )
             self.downsample_layers.append(downsample_layer)
+        # now the input shape should be ( B , 768 , H/32 , W/32 )
 
-        self.stages = nn.ModuleList() # 4 feature resolution stages, each consisting of multiple residual blocks
-        dp_rates=[x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))] 
+        self.stages = nn.ModuleList()
+        # 4 feature resolution stages, each consisting of multiple residual blocks
+        # corresponding  [3, 3, 9, 3] blocks
+        dp_rates=[x.item() for x in torch.linspace(0, drop_path_rate, sum(depths))]
+        # sum([3, 3, 9, 3]) = 18
+        # then if we assume drop_path_rate = 0.1 ,which cause range(0,0.1)
+        # splitted to 18 servings
+        # look like : [0.0, 0.005882, 0.0117, 0.0176,...., 0.1]
+
         cur = 0
         for i in range(4):
+            # blocks num = [ 3 , 3 , 9 , 3 ]
+            # 每个block里边实现的是 小 -> 大 -> 小 结构
+            # 每个block里边 由于 小 -> 大 -> 小 结构的channel 数目是通过 linner变换得到的
+            # 和1 * 1 的conv效果一样 ， 但是作者发现，"linner slightly faster in PyTorch"
+            # 所以在block里边的 layernorm 要求的是 channel last
             stage = nn.Sequential(
-                *[Block(dim=dims[i], drop_path=dp_rates[cur + j], 
-                layer_scale_init_value=layer_scale_init_value) for j in range(depths[i])]
+                *[Block(dim=dims[i], drop_path=dp_rates[cur + j],
+                        layer_scale_init_value=layer_scale_init_value) for j in range(depths[i])]
             )
             self.stages.append(stage)
             cur += depths[i]
 
-        self.norm = nn.LayerNorm(dims[-1], eps=1e-6) # final norm layer
+        self.norm = nn.LayerNorm(dims[-1], eps=1e-6) # Just for final norm layer
+
         self.head = nn.Linear(dims[-1], num_classes)
 
         self.apply(self._init_weights)
@@ -106,9 +138,13 @@ class ConvNeXt(nn.Module):
             nn.init.constant_(m.bias, 0)
 
     def forward_features(self, x):
+        # blocks num [ 3, 3, 9, 3]
+        # dims = [ 96, 192, 384, 768]
         for i in range(4):
             x = self.downsample_layers[i](x)
             x = self.stages[i](x)
+        # Now x shape with ( B , 768 , H/32 , W/32 )
+        # x.mean([-2, -1]) shape with ( B , 768 )
         return self.norm(x.mean([-2, -1])) # global average pooling, (N, C, H, W) -> (N, C)
 
     def forward(self, x):
