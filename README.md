@@ -4,12 +4,13 @@ Official PyTorch implementation of **ConvNeXt**, from the following paper:
 
 [A ConvNet for the 2020s](https://arxiv.org/abs/2201.03545). CVPR 2022.\
 [Zhuang Liu](https://liuzhuang13.github.io), [Hanzi Mao](https://hanzimao.me/), [Chao-Yuan Wu](https://chaoyuan.org/), [Christoph Feichtenhofer](https://feichtenhofer.github.io/), [Trevor Darrell](https://people.eecs.berkeley.edu/~trevor/) and [Saining Xie](https://sainingxie.com)\
-Facebook AI Research, UC Berkeley
+Facebook AI Research, UC Berkeley\
+[[`arXiv`](https://arxiv.org/abs/2201.03545)][[`video`](https://www.youtube.com/watch?v=QzCjXqFnWPE)]
 
 --- 
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/8370623/148624004-e9581042-ea4d-4e10-b3bd-42c92b02053b.png" width=100% height=100% 
+<img src="https://user-images.githubusercontent.com/8370623/180626875-fe958128-6102-4f01-9ca4-e3a30c3148f9.png" width=100% height=100% 
 class="center">
 </p>
 
@@ -20,8 +21,8 @@ We propose **ConvNeXt**, a pure ConvNet model constructed entirely from standard
 - [x] ImageNet-22K Pre-training Code  
 - [x] ImageNet-1K Fine-tuning Code  
 - [x] Downstream Transfer (Detection, Segmentation) Code
-- [x] Image Classification \[[Colab\]](https://colab.research.google.com/drive/1CBYTIZ4tBMsVL5cqu9N_-Q3TBprqsfEO?usp=sharing) and Web Demo [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/akhaliq/convnext)
-- [x] Fine-tune on CIFAR with Weights & Biases logging \[[Colab\]](https://colab.research.google.com/drive/1ijAxGthE9RENJJQRO17v9A7PTd1Tei9F?usp=sharing)
+- [x] Image Classification [\[Colab\]](https://colab.research.google.com/drive/1CBYTIZ4tBMsVL5cqu9N_-Q3TBprqsfEO?usp=sharing) and Web Demo [![Hugging Face Spaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/akhaliq/convnext)
+- [x] Fine-tune on CIFAR with Weights & Biases logging [\[Colab\]](https://colab.research.google.com/drive/1ijAxGthE9RENJJQRO17v9A7PTd1Tei9F?usp=sharing)
 
 
 
