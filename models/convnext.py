@@ -26,7 +26,7 @@ class Block(nn.Module):
     def __init__(self, dim, drop_path=0., layer_scale_init_value=1e-6):
         super().__init__()
         self.dwconv = nn.Conv2d(dim, dim, kernel_size=7, padding=3, groups=dim) # depthwise conv
-        self.norm = LayerNorm(dim, eps=1e-6)
+        self.norm = nn.InstanceNorm2d(dim, eps=1e-6)
         self.pwconv1 = nn.Linear(dim, 4 * dim) # pointwise/1x1 convs, implemented with linear layers
         self.act = nn.GELU()
         self.pwconv2 = nn.Linear(4 * dim, dim)
@@ -48,6 +48,54 @@ class Block(nn.Module):
 
         x = input + self.drop_path(x)
         return x
+
+
+class ChannelAttention(nn.Module):
+    def __init__(self, in_planes, ratio=8):
+        super(ChannelAttention, self).__init__()
+        self.avg_pool = nn.AdaptiveAvgPool2d(1)
+        self.max_pool = nn.AdaptiveMaxPool2d(1)
+
+        # 利用1x1卷积代替全连接
+        self.fc1   = nn.Conv2d(in_planes, in_planes // ratio, 1, bias=False)
+        self.relu1 = nn.ReLU()
+        self.fc2   = nn.Conv2d(in_planes // ratio, in_planes, 1, bias=False)
+
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        avg_out = self.fc2(self.relu1(self.fc1(self.avg_pool(x))))
+        max_out = self.fc2(self.relu1(self.fc1(self.max_pool(x))))
+        out = avg_out + max_out
+        return self.sigmoid(out)
+
+class SpatialAttention(nn.Module):
+    def __init__(self, kernel_size=7):
+        super(SpatialAttention, self).__init__()
+
+        assert kernel_size in (3, 7), 'kernel size must be 3 or 7'
+        padding = 3 if kernel_size == 7 else 1
+        self.conv1 = nn.Conv2d(2, 1, kernel_size, padding=padding, bias=False)
+        self.sigmoid = nn.Sigmoid()
+
+    def forward(self, x):
+        avg_out = torch.mean(x, dim=1, keepdim=True)
+        max_out, _ = torch.max(x, dim=1, keepdim=True)
+        x = torch.cat([avg_out, max_out], dim=1)
+        x = self.conv1(x)
+        return self.sigmoid(x)
+
+class cbam_block(nn.Module):
+    def __init__(self, channel, ratio=8, kernel_size=7):
+        super(cbam_block, self).__init__()
+        self.channelattention = ChannelAttention(channel, ratio=ratio)
+        self.spatialattention = SpatialAttention(kernel_size=kernel_size)
+
+    def forward(self, x):
+        x = x * self.channelattention(x)
+        x = x * self.spatialattention(x)
+        return x
+
 
 class ConvNeXt(nn.Module):
     r""" ConvNeXt
@@ -72,12 +120,12 @@ class ConvNeXt(nn.Module):
         self.downsample_layers = nn.ModuleList() # stem and 3 intermediate downsampling conv layers
         stem = nn.Sequential(
             nn.Conv2d(in_chans, dims[0], kernel_size=4, stride=4),
-            LayerNorm(dims[0], eps=1e-6, data_format="channels_first")
+            nn.InstanceNorm2d(dims[0], eps=1e-6)
         )
         self.downsample_layers.append(stem)
         for i in range(3):
             downsample_layer = nn.Sequential(
-                    LayerNorm(dims[i], eps=1e-6, data_format="channels_first"),
+                    nn.InstanceNorm2d(dims[0], eps=1e-6),
                     nn.Conv2d(dims[i], dims[i+1], kernel_size=2, stride=2),
             )
             self.downsample_layers.append(downsample_layer)
@@ -109,6 +157,10 @@ class ConvNeXt(nn.Module):
         for i in range(4):
             x = self.downsample_layers[i](x)
             x = self.stages[i](x)
+        print("============{}==============".format(x.shape))
+        cbamModule = cbam_block(x.shape[1])
+        x = cbamModule(x)
+        print("============{}==============".format(x.shape))
         return self.norm(x.mean([-2, -1])) # global average pooling, (N, C, H, W) -> (N, C)
 
     def forward(self, x):
@@ -161,7 +213,7 @@ def convnext_tiny(pretrained=False,in_22k=False, **kwargs):
     if pretrained:
         url = model_urls['convnext_tiny_22k'] if in_22k else model_urls['convnext_tiny_1k']
         checkpoint = torch.hub.load_state_dict_from_url(url=url, map_location="cpu", check_hash=True)
-        model.load_state_dict(checkpoint["model"])
+        # model.load_state_dict(checkpoint["model"])
     return model
 
 @register_model
@@ -200,3 +252,9 @@ def convnext_xlarge(pretrained=False, in_22k=False, **kwargs):
         checkpoint = torch.hub.load_state_dict_from_url(url=url, map_location="cpu")
         model.load_state_dict(checkpoint["model"])
     return model
+
+
+model = convnext_tiny(pretrained=True)
+input = torch.randn(1, 3, 224, 224)
+output = model(input)
+print(output.shape)
